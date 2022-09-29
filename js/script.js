@@ -9,31 +9,49 @@ import {
 // create scene
 const scene = new THREE.Scene();
 
+const loadingManager = new THREE.LoadingManager();
+// const progressBar = document.getElementById('progress-bar');
+
+// loadingManager.onProgress = function(_, loaded, total) {
+//     progressBar.value = (loaded / total) * 100;
+// }
+
+const progressBarContainer = document.querySelector('.progress-bar-container');
+const fullscreenbtn = document.querySelector('#fullscreen');
+loadingManager.onLoad = function() {
+    setTimeout(function(){
+        progressBarContainer.style.display = "none";
+        fullscreenbtn.style.display = "block";
+    }, 200);
+}
 // create webGL renderer
-const renderer = new THREE.WebGLRenderer();
+const fullcanvas = document.getElementById('fullcanvas');
+const canvas = document.getElementById('webgl');
+const renderer = new THREE.WebGLRenderer({canvas: canvas});
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.sortObjects = false
 renderer.shadowMap.enabled = true;
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0xffffff);
-document.body.appendChild(renderer.domElement);
+renderer.setClearColor(0x000000);
+// document.body.appendChild(renderer.domElement);
 
 // add camera
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0,20,10)
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0,300,-30)
 scene.add(camera);
 
 // add light
-var spotLight = new THREE.SpotLight('white', 4);
+var spotLight = new THREE.SpotLight('white', 2);
 spotLight.castShadow = true;
 scene.add(spotLight);
 
 // add orbit control 
-const controls = new OrbitControls( camera, renderer.domElement );
+const controls = new OrbitControls(camera, renderer.domElement);
 controls.rotateSpeed = 0.5;
 controls.zoomSpeed = 0.5;
-controls.minDistance = 7;
-controls.maxDistance = 15;
+controls.minDistance = 50;
+controls.maxDistance = 300;
+// controls.autoRotate = true;
 
 // add annotation labels 
 const labelRenderer = new CSS2DRenderer();
@@ -41,51 +59,62 @@ labelRenderer.setSize(window.innerWidth, window.innerHeight)
 labelRenderer.domElement.style.position = 'absolute'
 labelRenderer.domElement.style.top = '0px'
 labelRenderer.domElement.style.pointerEvents = 'none'
-document.body.appendChild(labelRenderer.domElement)
+// labelRenderer.domElement.id = "fullcanvas"
+fullcanvas.appendChild(labelRenderer.domElement)
 
 let arduino = new THREE.Object3D();
-const loader = new GLTFLoader();
+const loader = new GLTFLoader(loadingManager);
 var aId = 0
 let meshList = []
 let annotations = {}
-loader.load('https://dreamworthie.s3.us-east-2.amazonaws.com/arduino.glb', function (gltf) {
+var pins = {"Pin_0_Solder001": "0. Insufficient Wetting (board)",
+    "Pin_2_Solder001": "1. Insufficient Wetting (pin)",
+    "Pin_1_Solder001": "2. Solder Starved Joint (board+pin)",
+    "Pin_3_Solder001": "3. Solder Starved Joint (pin)",
+    "Pin_4_Solder001": "4. Cold Solder Joint",
+    "Pin_5_Solder001": "5. Cold Solder Joint (crack)",
+    "Pin_6_Solder001": "6. Excess Solder",
+    "Pin_7_Solder001": "7. Excess Solder",
+    "Pin_8_Solder001": "8+9. Solder Bridge (small)",
+    "Pin_10_Solder001": "10+11. Solder Bridge (large)",
+    "Pin_12_Solder001": "12. Splatters",
+    "Pin_13_Solder001": "13. Overheated Joint",
+}
+const pin_keys = Object.keys(pins);
+loader.load('https://dreamworthie.s3.us-east-2.amazonaws.com/MetroMini2.glb', function (gltf) {
     gltf.scene.traverse(function (child) {
         if (child.isMesh) {
-            const obj = (child).clone()
-            // console.log(obj.uuid)
-            if ((child.name !== "2590_Metro_Mini_Rev_B") && (child.name !== "Scene")){
+            if (pin_keys.includes(child.name)){
                 annotations[aId] = {
-                    uuid: obj.uuid
+                    uuid: child.uuid
                 }
                 const annotationDiv = document.createElement('div')
                 annotationDiv.className = 'annotationLabelClass'
                 const annotationTextDiv = document.createElement('div')
                 annotationTextDiv.className = 'annotationDescriptionClass'
-                annotationTextDiv.innerHTML = obj.name
+                annotationTextDiv.innerHTML = pins[child.name]
                 annotationDiv.appendChild(annotationTextDiv)
                 annotations[aId].descriptionDomElement = annotationTextDiv
                 const annotationLabel = new CSS2DObject(annotationDiv)
                 
                 annotationLabel.position.set(0, 0, 0)
-                obj.add(annotationLabel)
-                meshList.push(obj)
+                child.add(annotationLabel)
+                meshList.push(child)
                 aId += 1;
-                obj.material = metalmaterial
             }
-            arduino.add(obj);
         }
     })
-    arduino.position.y = -7;
-    scene.add(arduino);
+    // arduino.position.y = -7;
+    arduino.add(gltf.scene)
+    arduino.position.set(-125,0,50)
+    scene.add(arduino)
 
 }, undefined, function ( error ) {
     console.error( error );
 } );
 
-
 // on hover over mesh, show annotation label 
 const raycaster = new THREE.Raycaster()
-const pointer = new THREE.Vector2();
 
 renderer.domElement.addEventListener('mousemove', onClick, false);
 function onClick(event) {
@@ -126,7 +155,6 @@ function onClick(event) {
 // on window resize, update aspect ratio
 window.addEventListener('resize', onWindowResize, false);
 function onWindowResize() {
-    console.log('hi')
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 

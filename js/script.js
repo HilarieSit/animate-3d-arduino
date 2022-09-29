@@ -19,11 +19,10 @@ const loadingManager = new THREE.LoadingManager();
 const progressBarContainer = document.querySelector('.progress-bar-container');
 const fullscreenbtn = document.querySelector('#fullscreen');
 loadingManager.onLoad = function() {
-    setTimeout(function(){
-        progressBarContainer.style.display = "none";
-        fullscreenbtn.style.display = "block";
-    }, 200);
+    progressBarContainer.style.display = "none";
+    fullscreenbtn.style.display = "block";
 }
+
 // create webGL renderer
 const fullcanvas = document.getElementById('fullcanvas');
 const canvas = document.getElementById('webgl');
@@ -37,7 +36,7 @@ renderer.setClearColor(0x000000);
 
 // add camera
 const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0,300,-30)
+camera.position.set(0,250,-30)
 scene.add(camera);
 
 // add light

@@ -90,11 +90,19 @@
             background-color: #B31B1B;
             color: white;
         }
+        #loading{
+            animation: flickeranimation 4s infinite;
+        }
+        @keyframes flickeranimation {
+            0%   {opacity: 1;}
+            50%  {opacity: 0;}
+            100% {opacity: 1;}
+        }
     </style>
 </head>
 <body>
     <div class="progress-bar-container">
-        <label for="progress-bar">loading...</label>
+        <label id="loading" for="progress-bar">loading...</label>
         <!-- <progress id="progress-bar" value="0" max="100"></progress> -->
     </div>
     <div id="fullcanvas">
@@ -132,7 +140,8 @@
             if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
                 fullscreenbtn.innerHTML = '&#x2197;'
             }
-}  
+
+        }  
     </script>
     <script type="module" src="js/script.js"></script>
 </body>

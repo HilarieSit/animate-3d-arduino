@@ -31,7 +31,7 @@ renderer.setClearColor('#ffffff');
 
 // add camera
 const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.set(0,200,10);
+camera.position.set(0,170,70);
 scene.add(camera);
 
 // add light
@@ -123,19 +123,19 @@ loader.load('https://dreamworthie.s3.us-east-2.amazonaws.com/untitled5.glb', fun
         if (child.isMesh) {
             // add materials
             if (child.name == "2590_Metro_Mini_Rev_B1"){
-                child.material = material2
+                child.material = material2;
             }
             else if (child.name.includes("Spatter") || child.name.includes("Correct_Solder") ){
-                child.material = material1
+                child.material = material1;
             }
             else if (child.name.includes("Cube") || child.name.includes("Middle_Support")){
-                child.material = material6
+                child.material = material6;
             }
             else if (child.name.includes("Lower_Pin") || child.name.includes("Cylinder")){
-                child.material = material3
+                child.material = material3;
             }
             else if (child.name.includes("Tube")){
-                child.material = material5
+                child.material = material5;
             }
             // add labels
             else if (pin_keys.includes(child.name)){
@@ -157,18 +157,18 @@ loader.load('https://dreamworthie.s3.us-east-2.amazonaws.com/untitled5.glb', fun
                 meshList.push(child)
                 aId += 1;
                 if (child.name == "Pin_4_Solder001" || child.name == "Pin_5_Solder001"){
-                    child.material = material4
+                    child.material = material4;
                 } else {
-                    child.material = material1
+                    child.material = material1;
                 }
             }
         }
     })
-    arduino.add(gltf.scene)
-    arduino.position.set(-125,0,60)
-    scene.add(arduino)
-}, undefined, function ( error ) {
-    console.error( error );
+    arduino.add(gltf.scene);
+    arduino.position.set(-125,0,60);
+    scene.add(arduino);
+}, undefined, function (error) {
+    console.error(error);
 } );
 
 // on hover over mesh (or mobile touch), show annotation label 
@@ -241,11 +241,13 @@ function onKeyDown(e) {
     }
     // zoom in
     if (e.keyCode == 187 && (e.ctrlKey || e.metaKey)){
-        camera.position.y -= 20
+        camera.position.y *= 0.8
+        camera.position.z *= 0.8
     }
     // zoom out
     if (e.keyCode == 189 && (e.ctrlKey || e.metaKey)){
-        camera.position.y += 20
+        camera.position.y *= 1.2
+        camera.position.z *= 1.2
     }
 }
 

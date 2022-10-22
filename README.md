@@ -3,7 +3,8 @@ Animation of a 3D Arduino metro mini model using three.js library
 
 ## Demo
 Click on preview below to interact with model:
-[![img](https://github.com/HilarieSit/animate-3d-arduino/blob/main/screenshot.gif)](https://dreamworthie.s3.us-east-2.amazonaws.com/animate-3d-arduino/index.html)
+
+<a href="https://dreamworthie.s3.us-east-2.amazonaws.com/animate-3d-arduino/index.html"><img src="https://github.com/HilarieSit/animate-3d-arduino/blob/main/screenshot.gif" width="600"></a>
 
 To navigate the 3D model, use the following mouse movements: \
 &nbsp;&nbsp;&nbsp;&nbsp;**Pan**: Right Click & Drag \

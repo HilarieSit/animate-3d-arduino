@@ -45,6 +45,7 @@
             padding: 1em;
             background: #B31B1B;
             display: none;
+            /* top: -5em; */
         }
         canvas{
             width: 100%;
@@ -108,11 +109,11 @@
 </head>
 <body>
     <div class="progress-bar-container">
-        <label id="loading" for="progress-bar">loading...</label>
+        <label id="loading" for="progress-bar">loading...</label>   
     </div>
     <div id="fullcanvas">
-        <button id="fullscreen" onclick="goFullScreen();" tabindex="0">&#x2197;</button>
-        <canvas id="webgl"></canvas>
+        <button class="fullscreen" id="fullscreen" onclick="goFullScreen();" tabindex="0" aria-label="toggle fullscreen">&#x2197;</button>
+        <canvas id="webgl" aria-label="loaded 3D model"></canvas>
     </div>
     <script>
         var fullscreenbtn = document.getElementById("fullscreen");

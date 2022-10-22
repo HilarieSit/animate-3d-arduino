@@ -29,6 +29,7 @@ renderer.shadowMap.enabled = true;
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setClearColor('#ffffff');
 
+
 // add camera
 const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
 camera.position.set(0,170,70);
@@ -231,15 +232,24 @@ function onWindowResize() {
 
 // on keydown
 document.addEventListener('keydown', onKeyDown);
+var tabCount = 0
 function onKeyDown(e) {
     // tab through solder joints
     if (e.keyCode == 9) { 
-        clearLabels();
-        if (document.activeElement.className == "annotationLabelClass"){
-            document.activeElement.firstChild.style.display = 'block'
+        if (document.activeElement.id == "fullscreen"){
+            tabCount = 1
         }
+        clearLabels();
+        console.log(tabCount)
+        if (15 > tabCount > 0){
+            ;(
+                annotations[tabCount-1]
+                    .descriptionDomElement
+            ).style.display = 'block';
+        }  
+        tabCount += 1
     }
-    // zoom in
+    // zoom in      
     if (e.keyCode == 187 && (e.ctrlKey || e.metaKey)){
         camera.position.y *= 0.8
         camera.position.z *= 0.8

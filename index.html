@@ -45,7 +45,6 @@
             padding: 1em;
             background: #B31B1B;
             display: none;
-            /* top: -5em; */
         }
         canvas{
             width: 100%;
@@ -67,12 +66,6 @@
             z-index: 1;
             
         }
-        #progress-bar{
-            width: 30%;
-            margin-top: 10px;
-            height: 10px;
-            background: #B31B1B;
-        }
         label{
             font-family: monospace;
             font-size: 23px;
@@ -88,6 +81,7 @@
             border: 2px solid gray;
             background-color: white;
             color: gray;
+            cursor: pointer;
         }
         #fullscreen:hover{
             background-color: #B31B1B;
@@ -113,7 +107,7 @@
     </div>
     <div id="fullcanvas">
         <button class="fullscreen" id="fullscreen" onclick="goFullScreen();" tabindex="0" aria-label="toggle fullscreen">&#x2197;</button>
-        <canvas id="webgl" aria-label="loaded 3D model"></canvas>
+        <canvas id="webgl"></canvas>
     </div>
     <script>
         var fullscreenbtn = document.getElementById("fullscreen");

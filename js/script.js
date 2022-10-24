@@ -211,7 +211,7 @@ function onHover(e, touch) {
                         annotations[annotation]
                             .descriptionDomElement
                     ).style.display = 'block';
-                    
+                    annotations[annotation].descriptionDomElement.parentElement.focus();
                 }
             });
     }
@@ -219,6 +219,13 @@ function onHover(e, touch) {
         clearLabels();
     }   
 };
+
+fullscreenbtn.addEventListener('mouseenter', function() {
+    fullscreenbtn.focus();
+});
+fullscreenbtn.addEventListener('mouseleave', function() {
+    fullscreenbtn.blur();
+});
 
 // on window resize, update aspect ratio
 window.addEventListener('resize', onWindowResize);
@@ -232,30 +239,32 @@ function onWindowResize() {
 
 // on keydown
 document.addEventListener('keydown', onKeyDown);
-var tabCount = 0
 function onKeyDown(e) {
     // tab through solder joints
     if (e.keyCode == 9) { 
         if (document.activeElement.id == "fullscreen"){
-            tabCount = 1
+            var tabCount = 1
+        } else {
+            var tabCount = Object.keys(annotations).filter(function(key) {
+                return annotations[key].descriptionDomElement == document.activeElement.firstChild;
+            })
+            tabCount = parseInt(tabCount[0])+2
         }
         clearLabels();
-        console.log(tabCount)
         if (15 > tabCount > 0){
             ;(
                 annotations[tabCount-1]
                     .descriptionDomElement
             ).style.display = 'block';
         }  
-        tabCount += 1
     }
     // zoom in      
-    if (e.keyCode == 187 && (e.ctrlKey || e.metaKey)){
+    if (e.keyCode == 187){
         camera.position.y *= 0.8
         camera.position.z *= 0.8
     }
     // zoom out
-    if (e.keyCode == 189 && (e.ctrlKey || e.metaKey)){
+    if (e.keyCode == 189){
         camera.position.y *= 1.2
         camera.position.z *= 1.2
     }

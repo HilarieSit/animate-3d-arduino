@@ -15,8 +15,8 @@ To navigate the 3D model, use the following mouse movements: \
 ## Accessibility
 The following keyboard commands have been added to improve accessibility of the model: \
 &nbsp;&nbsp;&nbsp;&nbsp;**Pan**: Up, Down, Left, Right Arrows \
-&nbsp;&nbsp;&nbsp;&nbsp;**Zoom In**: Ctrl^+ \
-&nbsp;&nbsp;&nbsp;&nbsp;**Zoom Out**: Ctrl^- \
+&nbsp;&nbsp;&nbsp;&nbsp;**Zoom In**: + \
+&nbsp;&nbsp;&nbsp;&nbsp;**Zoom Out**: - \
 &nbsp;&nbsp;&nbsp;&nbsp;**View Labels (Hover)**: Tab
 
 ## Credits

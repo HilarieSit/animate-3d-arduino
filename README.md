@@ -19,5 +19,5 @@ The following keyboard commands have been added to improve accessibility of the 
 &nbsp;&nbsp;&nbsp;&nbsp;**Zoom Out**: - \
 &nbsp;&nbsp;&nbsp;&nbsp;**View Labels (Hover)**: Tab
 
-## Credits
+## Collaboration
 3D model created by Nik Charette

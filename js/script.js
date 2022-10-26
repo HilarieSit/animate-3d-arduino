@@ -1,6 +1,7 @@
 import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
+import { RGBELoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/RGBELoader.js';
 import { DRACOLoader } from 'https://unpkg.com/three@0.127.0/examples/jsm/loaders/DRACOLoader.js';
 import {
     CSS2DRenderer,
@@ -29,46 +30,55 @@ renderer.shadowMap.enabled = true;
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setClearColor('#ffffff');
 
-
 // add camera
 const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.set(0,170,70);
+camera.position.set(0,170,120);
 scene.add(camera);
 
 // add light
-var spotLight = new THREE.SpotLight('white', 3);
+var hemiLight = new THREE.HemisphereLight('white', 0x080820, 4)
+scene.add(hemiLight)
+
+var spotLight = new THREE.SpotLight('white', 1);
 spotLight.castShadow = true;
 scene.add(spotLight);
 
 // add materials
+new RGBELoader(loadingManager)
+    .load('https://dreamworthie.s3.us-east-2.amazonaws.com/animate-3d-arduino/gothic_manor_02_4k.hdr', function (texture) {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.environment = texture;
+    });
+
+var material0 = new THREE.MeshStandardMaterial( {
+    color: '#ffffff',
+    metalness: 0.2,
+    roughness: 0.5
+});
 var material1 = new THREE.MeshStandardMaterial( {
     color: '#C0C0C0',
     metalness: 0.95, 
-    roughness: 0.5
+    roughness: 0.6
 });
-
-var material2 = new THREE.MeshPhongMaterial( {
-    color: '#111111'
+var material2 = new THREE.MeshStandardMaterial( {
+    color: '#111111',
+    metalness: 0.2,
+    roughness: 0.6
 });
-
 var material3 = new THREE.MeshStandardMaterial( {
     color: '#EEE8AA',
-    metalness: 0.85,   
-    roughness: 0.2
+    metalness: 0.9,   
+    roughness: 0.5
 });
-
-var material4 = new THREE.MeshLambertMaterial( {
-    color: '#2D3033'
+var material4 = new THREE.MeshStandardMaterial( {
+    color: '#2D3033',
+    metalness: 0.3,
+    roughness: 0.5
 });
-
-var material5 = new THREE.MeshStandardMaterial( {
-    color: '#ffffbf',
-    metalness: 0.7,
-    roughness: 0.2
-});
-
-var material6 = new THREE.MeshPhongMaterial( {
-    color: '#2B2D2F'
+var material6 = new THREE.MeshStandardMaterial( {
+    color: '#111111',
+    metalness: 0.6,
+    roughness: 0.5
 });
 
 // add orbit control 
@@ -123,6 +133,9 @@ loader.load('https://dreamworthie.s3.us-east-2.amazonaws.com/untitled5.glb', fun
     gltf.scene.traverse(function (child) {
         if (child.isMesh) {
             // add materials
+            if (child.name.includes("Curve")){
+                child.material = material0
+            }
             if (child.name == "2590_Metro_Mini_Rev_B1"){
                 child.material = material2;
             }
@@ -136,7 +149,7 @@ loader.load('https://dreamworthie.s3.us-east-2.amazonaws.com/untitled5.glb', fun
                 child.material = material3;
             }
             else if (child.name.includes("Tube")){
-                child.material = material5;
+                child.material = material3;
             }
             // add labels
             else if (pin_keys.includes(child.name)){
@@ -277,7 +290,7 @@ function animate(){
     renderer.render(scene, camera);
     spotLight.position.set(
         camera.position.x + 0,
-        camera.position.y + 10,
+        camera.position.y + 50,
         camera.position.z + 0,
     );
     labelRenderer.render(scene, camera);
